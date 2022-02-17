@@ -1,282 +1,214 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Resume</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!--<link rel="apple-touch-icon" href="img/apple-touch-icon.png">-->
-        <!--<link rel="shortcut icon" type="image/x-icon" href="img/icon/favicon.ico">-->
-        <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/font-awesome.min.css">
-        <link rel="stylesheet" href="css/index.css">
-    </head>
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>爱的表白</title>	    
+        <link type="text/css" rel="stylesheet" href="./renxi/default.css">
+		<script type="text/javascript" src="./renxi/jquery.min.js"></script>
+		<script type="text/javascript" src="./renxi/jscex.min.js"></script>
+		<script type="text/javascript" src="./renxi/jscex-parser.js"></script>
+		<script type="text/javascript" src="./renxi/jscex-jit.js"></script>
+		<script type="text/javascript" src="./renxi/jscex-builderbase.min.js"></script>
+		<script type="text/javascript" src="./renxi/jscex-async.min.js"></script>
+		<script type="text/javascript" src="./renxi/jscex-async-powerpack.min.js"></script>
+		<script type="text/javascript" src="./renxi/functions.js" charset="utf-8"></script>
+		<script type="text/javascript" src="./renxi/love.js" charset="utf-8"></script>
+	    <style type="text/css">
+<!--
+.STYLE1 {color: #666666}
+-->
+        </style>
+</head>
     <body>
-        <header>
-            <div class="menu-area">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-3 col-sm-12">
-                            <div class="logo text-center text-uppercase">
-                                <a href="#">
-                                    <img src="img/logo.png">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-9 col-sm-12">
-                            <div class="main-menu">
-                                <nav>
-                                    <ul id="nav">
-                                        <li><a href="#">basic info</a></li>
-                                        <li><a href="#">education</a></li>
-                                        <li><a href="#">experiences</a></li>
-                                        <li><a href="#">skills</a></li>
-                                        <li><a href="#">Contact</a></li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
+			<audio autoplay="autopaly">
+					<source src="renxi.mp3" type="audio/mp3" />
+			</audio>  
+        <div id="main">
+            <div id="error">本页面采用HTML5编辑，目前您的浏览器无法显示，请换成谷歌(<a href="http://www.google.cn/chrome/intl/zh-CN/landing_chrome.html?hl=zh-CN&brand=CHMI">Chrome</a>)或者火狐(<a href="http://firefox.com.cn/download/">Firefox</a>)浏览器，或者其他游览器的最新版本。</div>
+             <div id="wrap">
+                <div id="text">
+			        <div id="code">
+			      <font color="#FF0000">  	<span class="say">亲爱的小萌萌，我爱你。</span><br>
+						<span class="say"> </span><br>
+<span class="say"> 我知道我不会甜言蜜语，但是我会用行动证明一切</span><br>
+						<span class="say"> </span><br>
+						
+						
+			        	
+			        	<span class="say">你说我长的丑，又哪有那么多人长的帅</span><br>
+<span class="say">你说我长的胖，又哪有那么多人长的瘦</span><br>
+<span class="say">因为我太无聊了，所以我写了这个鬼玩意</span><br>
+
+ <span class="say">虽然你看不见我写的，但是我还是要把它整出来</span><br>
+						<span class="say"> </span><br>
+                        <span class="say"><span class="space"></span> -- 爱你的熊熊--</span>
+			  </font></p>
+      </div>
                 </div>
+                <div id="clock-box">
+                    <span class="STYLE1"></span><font color="#33CC00">亲爱的萌萌，我喜欢你</font>
+<span class="STYLE1">已经是……</span>
+                  <div id="clock"></div>
+              </div>
+                <canvas id="canvas" width="1100" height="680"></canvas>
             </div>
-            <div class="slider-area">
-                <div class="slider-content">
-                    <!--轮播图片-->
-                    <img src="img/1.jpg" title="#slider-direction-1" style="width: 1343px;display: none">  <!-- 计算width宽-->
-                    <img src="img/2.jpg" title="#slider-direction-2" style="width: 1343px;">
-                    <img src="img/3.jpg" title="#slider-direction-3" style="width: 1343px; display: none">
-                    <!-- 漂浮  -->
-                    <div class="float-content">
-                        <div class="float-content-table">
-                            <div class="float-content-text text-center">
-                                <h2 class="title2">Hello, everybody</h2>
-                                <h1 class="title1">Welcome</h1>
-                            </div>
-                        </div>
-                    </div>
-                    <!--左右按钮图标-->
-                    <div class="slider-button">
-                        <a href="" class="prevButton"></a>
-                        <a href="" class="nextButton"></a>
-                    </div>
-                </div>
-            </div>
-        </header>
-        <div id="basic-info" class="basic-info">
-            <div class="container">
-                <h3 class="basic-info-title text-center text-uppercase">basic info</h3>
-                <div class="basic-info-top">
-                    <h4>Basic Information</h4>
-                    <p>
-                        I am Zhixiong Zhang, 26 years old, born in hubei province. I will graduate from Ningbo University.
-                        my major is Electronic and Communications Engineering, and I got my master degree after my graduation in the year of 2017.
-                        In the years of school life, I was awarded some prizes for excellence in my studies.
-                    </p>
-                </div>
-                <div class="basic-info-grids">
-                    <div class="col-md-6 grid-info">
-                        <h4>Self Assessment</h4>
-                        <p>
-                           I am a positive and optimistic person, have the right outlook on life, values.
-                           In working, I am a careful and responsible man, with the ability to solve problems independently,
-                           also, having the quick learning ability and easy to communicate. <br>
-                           As an Internet practitioner, I have been keeping a high degree of sensitivity and attention about the Internet.
-                        </p>
-                        <h4>Occupational Planning</h4>
-                        <p>
-                            Within one or two years after graduation, I will upgrade and develop my own capacity by continuous learning and training.
-                            After gathering invaluable working experience, I will try to develop in an all-sided development way to find my career orientation.
-                            And then striving to attain this goal.
-                        </p>
-                    </div>
-                    <div class="col-md-6 basic-info-pic">
-                        <img src="img/g1.jpg" class="img-responsive">
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-            </div>
+            
         </div>
-        <div id="edu" class="edu">
-            <div class="container">
-                <h3 class="edu-title text-center text-uppercase">education</h3>
-                <div class="edu-grids">
-                    <div class="edu-grid">
-                        <div class="col-md-4 edu-pic">
-                            <img src="img/s1.jpg" class="img-responsive">
-                        </div>
-                        <div class="col-md-8 edu-info">
-                            <h4>Study</h4>
-                            <p>
-                                In the few years of school learning, I have always been interested in learning new knowledge and have achieved great success in study.
-                                The academic record is the front ten percent, have published three english academic papers in Science Citation Index.
-                                <br>
-                                These experiences enable me to improve my learning ability, in the end, I got the honor of excellent graduates of Zhejiang Province.
-                                Also, I won the first scholarship once, the second scholarship once, the excellence scholarship, the innovation scholarship and the Miyoshi graduate student.
-                                <br>
-                                Now, I took the front-end developer as my first job， and have done it for one year.
-                            </p>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="edu-grid">
-                        <div class="col-md-4 edu-pic">
-                            <img src="img/s2.jpg" class="img-responsive" alt=""/>
-                        </div>
-                        <div class="col-md-8 edu-info">
-                            <h4>Life</h4>
-                            <p>
-                                In life, I have a positive attitude, friendly, easy-going personality, can keep great relationship with my schoolmates.
-                                I also like enjoying lots of outdoor activities, such as riding, skiing, taking photos with photographer.
-                                <br>
-                                These hobbies have cultivated my comprehensive qualities, including teamwork, conscientious, responsibility and so on.
-                                I think they will have a positive effect on my later life.
-                                <br>
-                                The campus life is a nut chocolate for me and  help me grow up, and now I'm ready to step into the social life.
-                            </p>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="exp" class="exp">
-        <div class="container">
-            <h3 class="exp-title text-center text-uppercase">experience</h3>
-            <div class="exp-grids">
-                <section>
-                    <ul id="exp-thumbs" class="exp-thumbs">
-                        <div class="row">
-                            <li class="col-md-4 col-sm-6 col-xs-12">
-                                <a href="img/g1.jpg" class="b-link-stripe b-animate-go  thickbox">
-                                    <img src="img/g2.jpg" class="img-responsive">
-                                    <div>
-                                        <h4>HTML+CSS</h4>
-                                        <span>use HTML+CSS programming language complete the basic website construction</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="col-md-4 col-sm-6 col-xs-12">
-                                <a href="img/g2.jpg" class="b-link-stripe b-animate-go  thickbox">
-                                    <img src="img/g2.jpg" class="img-responsive">
-                                    <div>
-                                        <h4>JAVASCRIPT</h4>
-                                        <span>Understanding the Object-oriented cogitation of javascript and using it Skillfully</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="col-md-4 col-sm-6 col-xs-12">
-                                <a href="img/g3.jpg" class="b-link-stripe b-animate-go  thickbox">
-                                    <img src="img/g3.jpg" class="img-responsive">
-                                    <div>
-                                        <h4>JQUERY</h4>
-                                        <span>deeply understand the jQuery proxy object and can use it to optimize the code</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="col-md-4 col-sm-6 col-xs-12">
-                                <a href="img/g4.jpg" class="b-link-stripe b-animate-go  thickbox">
-                                    <img src="img/g4.jpg" class="img-responsive">
-                                    <div>
-                                        <h4>BOOTSTRAP</h4>
-                                        <span>use bootstrap to quickly build the Website and less to compile preprocessing css</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="col-md-4 col-sm-6 col-xs-12">
-                                <a href="img/g5.jpg" class="b-link-stripe b-animate-go  thickbox">
-                                    <img src="img/g5.jpg" class="img-responsive">
-                                    <div>
-                                        <h4>NODE</h4>
-                                        <span>use node.js can complete the client and server interaction, also some crawler application software</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="col-md-4 col-sm-6 col-xs-12">
-                                <a href="img/g6.jpg" class="b-link-stripe b-animate-go  thickbox">
-                                    <img src="img/g6.jpg" class="img-responsive">
-                                    <div>
-                                        <h4>WEBPACK</h4>
-                                        <span>understand webpack and other packaging tools and can use its plugins to do some basic deployment work</span>
-                                    </div>
-                                </a>
-                            </li>
-                        </div>
-                    </ul>
-                    <div class="clearfix"> </div>
-                </section>
-            </div>
-        </div>
-    </div>
-        <div id="skills" class="skills">
-            <div class="container">
-                <h3 class="skills-title text-center text-uppercase">Skills</h3>
-                <div class="skill-grids">
-                    <h4>html、css、js</h4>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar" role="progressbar" aria-valuenow="91" aria-valuemin="0" aria-valuemax="100" style="width: 91%">
-                            <span class="sr-only">91% Complete</span>
-                        </div>
-                    </div>
-                    <h4>jQuery、bootstrap、react</h4>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar" role="progressbar" aria-valuenow="79" aria-valuemin="0" aria-valuemax="100" style="width: 79%">
-                            <span class="sr-only">79% Complete</span>
-                        </div>
-                    </div>
-                    <h4>es6、node.js</h4>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar" role="progressbar" aria-valuenow="59" aria-valuemin="0" aria-valuemax="100" style="width: 59%">
-                            <span class="sr-only">59% Complete</span>
-                        </div>
-                    </div>
-                    <h4>webpack</h4>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar" role="progressbar" aria-valuenow="51" aria-valuemin="0" aria-valuemax="100" style="width: 51%">
-                            <span class="sr-only">51% Complete</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="contact" class="contact">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-3 col-sm-6">
-                        <a href="#">
-                            <span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>
-                            <span class="contact-content">contact me</span>
-                        </a>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <a href="#">
-                            <span class="contact-text glyphicon glyphicon-phone-alt" aria-hidden="true"></span>
-                            <span class="contact-content">&nbsp;&nbsp;&nbsp;&nbsp;159 6842 1647</span>
-                        </a>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <a href="#">
-                            <span class="contact-text glyphicon glyphicon-envelope" aria-hidden="true"></span>
-                            <span class="contact-content">&nbsp;&nbsp;&nbsp;&nbsp;zhang1647@qq.com</span>
-                        </a>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <a href="#">
-                            <span class="contact-text glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-                            <span class="contact-content">&nbsp;&nbsp;&nbsp;&nbsp;浙江省 杭州市</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-        <div class="footer">
-            <div class="container">
-                <div class="copywrite text-center">
-                    <p>Copyright &copy; 2016.  All rights reserved.</p>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-    </body>
-</html>
+    
+    <script>
+    </script>
+
+    <script>
+    (function(){
+        var canvas = $('#canvas');
+		
+        if (!canvas[0].getContext) {
+            $("#error").show();
+            return false;        }
+
+        var width = canvas.width();
+        var height = canvas.height();        
+        canvas.attr("width", width);
+        canvas.attr("height", height);
+        var opts = {
+            seed: {
+                x: width / 2 - 20,
+                color: "rgb(190, 26, 37)",
+                scale: 2
+            },
+            branch: [
+                [535, 680, 570, 250, 500, 200, 30, 100, [
+                    [540, 500, 455, 417, 340, 400, 13, 100, [
+                        [450, 435, 434, 430, 394, 395, 2, 40]
+                    ]],
+                    [550, 445, 600, 356, 680, 345, 12, 100, [
+                        [578, 400, 648, 409, 661, 426, 3, 80]
+                    ]],
+                    [539, 281, 537, 248, 534, 217, 3, 40],
+                    [546, 397, 413, 247, 328, 244, 9, 80, [
+                        [427, 286, 383, 253, 371, 205, 2, 40],
+                        [498, 345, 435, 315, 395, 330, 4, 60]
+                    ]],
+                    [546, 357, 608, 252, 678, 221, 6, 100, [
+                        [590, 293, 646, 277, 648, 271, 2, 80]
+                    ]]
+                ]] 
+            ],
+            bloom: {
+                num: 700,
+                width: 1080,
+                height: 650,
+            },
+            footer: {
+                width: 1200,
+                height: 5,
+                speed: 10,
+            }
+        }
+
+        var tree = new Tree(canvas[0], width, height, opts);
+        var seed = tree.seed;
+        var foot = tree.footer;
+        var hold = 1;
+
+        canvas.click(function(e) {
+            var offset = canvas.offset(), x, y;
+            x = e.pageX - offset.left;
+            y = e.pageY - offset.top;
+            if (seed.hover(x, y)) {
+                hold = 0; 
+                canvas.unbind("click");
+                canvas.unbind("mousemove");
+                canvas.removeClass('hand');
+            }
+        }).mousemove(function(e){
+            var offset = canvas.offset(), x, y;
+            x = e.pageX - offset.left;
+            y = e.pageY - offset.top;
+            canvas.toggleClass('hand', seed.hover(x, y));
+        });
+
+        var seedAnimate = eval(Jscex.compile("async", function () {
+            seed.draw();
+            while (hold) {
+                $await(Jscex.Async.sleep(10));
+            }
+            while (seed.canScale()) {
+                seed.scale(0.95);
+                $await(Jscex.Async.sleep(10));
+            }
+            while (seed.canMove()) {
+                seed.move(0, 2);
+                foot.draw();
+                $await(Jscex.Async.sleep(10));
+            }
+        }));
+
+        var growAnimate = eval(Jscex.compile("async", function () {
+            do {
+    	        tree.grow();
+                $await(Jscex.Async.sleep(10));
+            } while (tree.canGrow());
+        }));
+
+        var flowAnimate = eval(Jscex.compile("async", function () {
+            do {
+    	        tree.flower(2);
+                $await(Jscex.Async.sleep(10));
+            } while (tree.canFlower());
+        }));
+
+        var moveAnimate = eval(Jscex.compile("async", function () {
+            tree.snapshot("p1", 240, 0, 610, 680);
+            while (tree.move("p1", 500, 0)) {
+                foot.draw();
+                $await(Jscex.Async.sleep(10));
+            }
+            foot.draw();
+            tree.snapshot("p2", 500, 0, 610, 680);
+
+            // 会有闪烁不得意这样做, (＞﹏＜)
+            canvas.parent().css("background", "url(" + tree.toDataURL('image/png') + ")");
+            canvas.css("background", "#ffe");
+            $await(Jscex.Async.sleep(300));
+            canvas.css("background", "none");
+        }));
+
+        var jumpAnimate = eval(Jscex.compile("async", function () {
+            var ctx = tree.ctx;
+            while (true) {
+                tree.ctx.clearRect(0, 0, width, height);
+                tree.jump();
+                foot.draw();
+                $await(Jscex.Async.sleep(25));
+            }
+        }));
+
+        var textAnimate = eval(Jscex.compile("async", function () {
+		    var together = new Date();
+		    together.setFullYear(2015,7 , 8); 			//时间年月日
+		    together.setHours(19);						//小时	
+		    together.setMinutes(0);					//分钟
+		    together.setSeconds(0);					//秒前一位
+		    together.setMilliseconds(2);				//秒第二位
+
+		    $("#code").show().typewriter();
+            $("#clock-box").fadeIn(500);
+            while (true) {
+                timeElapse(together);
+                $await(Jscex.Async.sleep(1000));
+            }
+        }));
+
+        var runAsync = eval(Jscex.compile("async", function () {
+            $await(seedAnimate());
+            $await(growAnimate());
+            $await(flowAnimate());
+            $await(moveAnimate());
+
+            textAnimate().start();
+
+            $await(jumpAnimate());
+        }));
+
+        runAsync().start();
+    })();
+    </script></body></html>
