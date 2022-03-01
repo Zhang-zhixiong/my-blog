@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>认识docker</title>
+      <link href="/2022/02/28/docker/"/>
+      <url>/2022/02/28/docker/</url>
+      
+        <content type="html"><![CDATA[<h4 id="1-Linux-Namespace"><a href="#1-Linux-Namespace" class="headerlink" title="1. Linux Namespace"></a>1. Linux Namespace</h4><p>容器其实是一种沙盒技术，应用与应用之间就是通过“边界”进行隔离，互不干扰，这种技术手段就是Linux里面的Namespace机制。Docker容器这个概念实际上是在创建容器进程时，指定了这个容器进程所需要启用的一组Namespace参数。Linux操作系统提供多种Namespace，比如PID、Mount（被隔离进程只能看到当前Namespace里面的挂载点信息）、UTS、IPC、Network（被隔离进程只能看到当前Namespace里面的网络设备和配置）和User这些Namespace，用来对各种不同的进程上下文进行“边界”操作。其不足之处在于：</p><ul><li>隔离的不彻底（由于共享宿主机内核，windows运行Linux容器不行，低版本Linux运行高版本Linux容器也不行）；</li><li>在Linux内核中有些资源不能被Namespace化，比如：时间。<h4 id="2-Linux-Cgroups"><a href="#2-Linux-Cgroups" class="headerlink" title="2. Linux Cgroups"></a>2. Linux Cgroups</h4>Linux Cgroups（Linux Control Group）就是Linux内核中用来为进程设置资源限制的一个重要功能，主要的作用就是限制一个进程组能够使用的资源上限，包括CPU、内存、磁盘、网络带宽等等。相关概念如下：</li><li>任务(task): 在cgroup中，任务就是一个进程。</li><li>控制组(control group): cgroup的资源控制是以控制组的方式实现，控制组指明了资源的配额限制。进程可以加入到某个控制组，也可以迁移到另一个控制组。</li><li>层级(hierarchy): 控制组有层级关系，类似树的结构，子节点的控制组继承父控制组的属性(资源配额、限制等)。</li><li>子系统(subsystem): 一个子系统其实就是一种资源的控制器，比如memory子系统可以控制进程内存的使用。子系统需要加入到某个层级，然后该层级的所有控制组，均受到这个子系统的控制。</li></ul><p>Linux通过文件的方式，将cgroups的功能和配置暴露给用户，这得益于Linux的虚拟文件系统（VFS）。VFS将具体文件系统的细节隐藏起来，给用户态提供一个统一的文件系统API接口，cgroups和VFS之间的链接部分，称之为cgroups文件系统。几个常见子系统包括cpu、cpuacct、cpuset、memory、blkio：</p><ul><li>cpu子系统：cpu子系统限制对CPU的访问，每个参数独立存在于cgroups虚拟文件系统的伪文件中；</li><li>cpuacct子系统：子系统生成cgroup任务所使用的CPU资源报告，不做资源限制功能；</li><li>cpuset子系统：适用于分配独立的CPU节点和Mem节点，比如将进程绑定在指定的CPU或者内存节点上运行；</li><li>memory子系统：memory子系统主要涉及内存一些的限制和操作；</li><li>blkio子系统：主要用于控制设备IO的访问。有两种限制方式：权重和上限，权重是给不同的应用一个权重值，按百分比使用IO资源，上限是控制应用读写速率的最大值。<br>Linux Cgroups简单粗暴的理解就是一个子系统目录加上一组资源限制文件的组合，在docker项目中，它们只需要在每个子系统下面，为每个容器创建一个控制组（新的目录），然后在容器启动的时候，把这个容器进程的PID填写到队友控制组的tasks文件中就可以了。<h4 id="3-基于rootfs的文件系统"><a href="#3-基于rootfs的文件系统" class="headerlink" title="3. 基于rootfs的文件系统"></a>3. 基于rootfs的文件系统</h4>对docker项目来说，最核心的原理实际上就是为待创建的用户进程：</li></ul><ol><li>启用Linux Namespace配置；</li><li>设置指定的Cgroups参数；</li><li>切换进程的根目录（Change Root）。</li></ol><p>第三点其实也就是容器镜像，也叫作rootfs。它是一个操作系统的所有文件和目录，并不包含内核，内核是共享宿主机内核。而在rootfs上，docker又创新使用了多个增量rootfs联合挂载成一个完整rootfs的方案，也就是容器镜像中的“层”概念。这种方式也就是容器技术“强一致性”的重要体现。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 文章 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> docker </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>裸金属问题排查</title>
       <link href="/2022/02/22/openstack-%E8%A3%B8%E9%87%91%E5%B1%9E%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%80%9D%E8%B7%AF/"/>
       <url>/2022/02/22/openstack-%E8%A3%B8%E9%87%91%E5%B1%9E%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%80%9D%E8%B7%AF/</url>

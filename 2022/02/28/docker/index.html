@@ -4,13 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="裸金属问题排查, Zhangzhixiong">
-    <meta name="description" content="1.   裸金属正常发放流程主要日志如下
-日志目录：/var/log/ironic/ironic-conductor.log
-
-开始部署：do_node_deploy
-
-日志：RPC do_node_deploy called for no">
+    <meta name="keywords" content="认识docker, Zhangzhixiong">
+    <meta name="description" content="1. Linux Namespace容器其实是一种沙盒技术，应用与应用之间就是通过“边界”进行隔离，互不干扰，这种技术手段就是Linux里面的Namespace机制。Docker容器这个概念实际上是在创建容器进程时，指定了这个容器进程所需要">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -22,7 +17,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>裸金属问题排查 | Zhangzhixiong</title>
+    <title>认识docker | Zhangzhixiong</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -141,12 +136,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/18.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">裸金属问题排查</h1>
+                    <h1 class="description center-align post-title">认识docker</h1>
                 </div>
             </div>
         </div>
@@ -262,8 +257,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/openstack/">
-                                <span class="chip bg-color">openstack</span>
+                            <a href="/tags/docker/">
+                                <span class="chip bg-color">docker</span>
                             </a>
                         
                     </div>
@@ -287,7 +282,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-02-22
+                    2022-02-28
                 </div>
                 
 
@@ -308,182 +303,29 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h4 id="1-裸金属正常发放流程"><a href="#1-裸金属正常发放流程" class="headerlink" title="1.   裸金属正常发放流程"></a>1.   裸金属正常发放流程</h4><p>主要日志如下</p>
-<p>日志目录：/var/log/ironic/ironic-conductor.log</p>
+                <h4 id="1-Linux-Namespace"><a href="#1-Linux-Namespace" class="headerlink" title="1. Linux Namespace"></a>1. Linux Namespace</h4><p>容器其实是一种沙盒技术，应用与应用之间就是通过“边界”进行隔离，互不干扰，这种技术手段就是Linux里面的Namespace机制。Docker容器这个概念实际上是在创建容器进程时，指定了这个容器进程所需要启用的一组Namespace参数。Linux操作系统提供多种Namespace，比如PID、Mount（被隔离进程只能看到当前Namespace里面的挂载点信息）、UTS、IPC、Network（被隔离进程只能看到当前Namespace里面的网络设备和配置）和User这些Namespace，用来对各种不同的进程上下文进行“边界”操作。其不足之处在于：</p>
+<ul>
+<li>隔离的不彻底（由于共享宿主机内核，windows运行Linux容器不行，低版本Linux运行高版本Linux容器也不行）；</li>
+<li>在Linux内核中有些资源不能被Namespace化，比如：时间。<h4 id="2-Linux-Cgroups"><a href="#2-Linux-Cgroups" class="headerlink" title="2. Linux Cgroups"></a>2. Linux Cgroups</h4>Linux Cgroups（Linux Control Group）就是Linux内核中用来为进程设置资源限制的一个重要功能，主要的作用就是限制一个进程组能够使用的资源上限，包括CPU、内存、磁盘、网络带宽等等。相关概念如下：</li>
+<li>任务(task): 在cgroup中，任务就是一个进程。</li>
+<li>控制组(control group): cgroup的资源控制是以控制组的方式实现，控制组指明了资源的配额限制。进程可以加入到某个控制组，也可以迁移到另一个控制组。</li>
+<li>层级(hierarchy): 控制组有层级关系，类似树的结构，子节点的控制组继承父控制组的属性(资源配额、限制等)。</li>
+<li>子系统(subsystem): 一个子系统其实就是一种资源的控制器，比如memory子系统可以控制进程内存的使用。子系统需要加入到某个层级，然后该层级的所有控制组，均受到这个子系统的控制。</li>
+</ul>
+<p>Linux通过文件的方式，将cgroups的功能和配置暴露给用户，这得益于Linux的虚拟文件系统（VFS）。VFS将具体文件系统的细节隐藏起来，给用户态提供一个统一的文件系统API接口，cgroups和VFS之间的链接部分，称之为cgroups文件系统。几个常见子系统包括cpu、cpuacct、cpuset、memory、blkio：</p>
+<ul>
+<li>cpu子系统：cpu子系统限制对CPU的访问，每个参数独立存在于cgroups虚拟文件系统的伪文件中；</li>
+<li>cpuacct子系统：子系统生成cgroup任务所使用的CPU资源报告，不做资源限制功能；</li>
+<li>cpuset子系统：适用于分配独立的CPU节点和Mem节点，比如将进程绑定在指定的CPU或者内存节点上运行；</li>
+<li>memory子系统：memory子系统主要涉及内存一些的限制和操作；</li>
+<li>blkio子系统：主要用于控制设备IO的访问。有两种限制方式：权重和上限，权重是给不同的应用一个权重值，按百分比使用IO资源，上限是控制应用读写速率的最大值。<br>Linux Cgroups简单粗暴的理解就是一个子系统目录加上一组资源限制文件的组合，在docker项目中，它们只需要在每个子系统下面，为每个容器创建一个控制组（新的目录），然后在容器启动的时候，把这个容器进程的PID填写到队友控制组的tasks文件中就可以了。<h4 id="3-基于rootfs的文件系统"><a href="#3-基于rootfs的文件系统" class="headerlink" title="3. 基于rootfs的文件系统"></a>3. 基于rootfs的文件系统</h4>对docker项目来说，最核心的原理实际上就是为待创建的用户进程：</li>
+</ul>
 <ol>
-<li>开始部署：<strong>do_node_deploy</strong></li>
+<li>启用Linux Namespace配置；</li>
+<li>设置指定的Cgroups参数；</li>
+<li>切换进程的根目录（Change Root）。</li>
 </ol>
-<p>日志：<strong>RPC do_node_deploy called for node</strong></p>
-<p><strong>do_node_deploy Calling event</strong></p>
-<p><code>2018-04-13 11:28:03.154 212706 DEBUG ironic.conductor.manager [req-1311c82c-b51a-4f5e-8718-5bc59b5d6797 - - - - -] **do_node_deploy** Calling event: deploy for node: 946dbfbe-4c02-458b-a3b2-ded74816f262 do_node_deploy /usr/lib/python2.7/site-packages/ironic/conductor/manager.py:599</code></p>
-<ol start="2">
-<li>创建neutron端口：<strong>creating neutron ports</strong></li>
-</ol>
-<p><code>For node 946dbfbe-4c02-458b-a3b2-ded74816f262, **creating neutron ports** on network 547f8000-e91d-4591-b861-470c07c50c1b using NeutronNetwork network interface. add_ports_to_network /usr/lib/python2.7/site-packages/ironic/common/neutron.py:186</code></p>
-<ol start="3">
-<li><strong>Build PXE config</strong> </li>
-</ol>
-<p><code>2018-04-13 11:28:11.917 212706 DEBUG ironic.common.pxe_utils [req-1311c82c-b51a-4f5e-8718-5bc59b5d6797 - - - - -] Building PXE config for node 946dbfbe-4c02-458b-a3b2-ded74816f262 create_pxe_config /usr/lib/python2.7/site-packages/ironic/common/pxe_utils.py:195</code></p>
-<ol start="4">
-<li><strong>Fetching necessary kernel and ramdisk</strong></li>
-</ol>
-<p><code>2018-04-13 11:28:18.082 212706 DEBUG ironic.drivers.modules.pxe [req-1311c82c-b51a-4f5e-8718-5bc59b5d6797 - - - - -] Fetching necessary kernel and ramdisk for node 946dbfbe-4c02-458b-a3b2-ded74816f262 _cache_ramdisk_kernel /usr/lib/python2.7/site-packages/ironic/drivers/modules/pxe.py:303</code></p>
-<ol start="5">
-<li><strong>Set Boot Device to pxe</strong></li>
-</ol>
-<p><code>2018-04-13 11:28:18.096 212706 DEBUG ironic.common.utils [req-a361c513-d672-4d64-a4c3-72694967fe51 - - - - -] Command stdout is: &quot;Set Boot Device to pxe</code></p>
-<ol start="6">
-<li>BM上电发心跳：</li>
-</ol>
-<p><code>2018-04-13 11:33:20.043 212706 DEBUG ironic.conductor.manager [req-4c8ecc1f-a4c0-49f5-a21e-315592339bb1 - - - - -] **RPC heartbeat called** **for** **node 946dbfbe**-4c02-458b-a3b2-ded74816f262 heartbeat /usr/lib/python2.7/site-packages/ironic/conductor/manager.py:2588</code></p>
-<ol start="7">
-<li>准备镜像：</li>
-</ol>
-<p><code>2018-04-13 11:33:30.130 212706 DEBUG ironic.drivers.modules.agent_client [req-4c8ecc1f-a4c0-49f5-a21e-315592339bb1 - - - - -] Preparing image dc4ad588-6688-4466-a074-5305cb8eddbf on **node 946dbfbe**-4c02-458b-a3b2-ded74816f262. prepare_image /usr/lib/python2.7/site-packages/ironic/drivers/modules/agent_client.py:115</code></p>
-<ol start="8">
-<li>镜像开始时间:</li>
-</ol>
-<p><code>2018-04-13 11:33:58.202 212706 DEBUG ironic.drivers.modules.agent_client [-] Status of agent commands for **node 946dbfbe**-4c02-458b-a3b2-ded74816f262: **prepare_image: result &quot;None&quot;**, error &quot;None&quot; get_commands_status /usr/lib/python2.7/site-packages/ironic/drivers/modules/agent_client.py:107</code></p>
-<ol start="9">
-<li>镜像结束时间：</li>
-</ol>
-<p><code>2018-04-13 13:26:30.257 212706 DEBUG ironic.drivers.modules.agent_client [-] Status of agent commands for **node 946dbfbe**-4c02-458b-a3b2-ded74816f262: **prepare_image: result &quot;&#123;u&#39;result&#39;:** u&#39;prepare_image: image (dc4ad588-6688-4466-a074-5305cb8eddbf) **written to device /dev/sda** &#39;&#125;&quot;, error &quot;None&quot; get_commands_status /usr/lib/python2.7/site-packages/ironic/drivers/modules/agent_client.py:107</code></p>
-<p>如果在provision过程中错，通过以上日志可准确定位到问题所处的阶段。</p>
-<h4 id="2-挂卷-卸卷类问题"><a href="#2-挂卷-卸卷类问题" class="headerlink" title="2.   挂卷/卸卷类问题"></a>2.   挂卷/卸卷类问题</h4><ol>
-<li>挂卷/卸卷失败，nova-compute日志中提示Connector not found等类似的错误</li>
-</ol>
-<ul>
-<li><p>确认物理连接的连通性，从服务器—交换机—盘机三者之间的物理连接</p>
-</li>
-<li><p>确认管理口是否UP</p>
-</li>
-<li><p>测试Ironic节点到BM的端口，命令：nc –v BM-IP 9999或者telnet BM-IP 9999</p>
-</li>
-<li><p>登录BM，netstat -nlp 9999查看物理机是否监听9999端口</p>
-</li>
-</ul>
-<ol start="2">
-<li>挂卷/卸卷失败，nova-compute日志显示agent not available等</li>
-</ol>
-<ul>
-<li><p>问题2中的步骤2、3；</p>
-</li>
-<li><p>登录BM，ip a 确认端口状态</p>
-</li>
-<li><p>确认ironic-python-agent是否正常</p>
-</li>
-<li><p>HBA卡端口是否online，命令：<strong>cat sys/class/fc_host/host*/port_state</strong></p>
-</li>
-<li><p>如果以上都没有问题，可以重启下BM的ironic-python-agent</p>
-</li>
-</ul>
-<ol start="3">
-<li>卸卷长时间显示detaching，cinder/volume日志The specified port is not exist</li>
-</ol>
-<ul>
-<li>确认ERROR的准确位置，如果是cinder.volume.drivers.huawei…，则是华为驱动侧的问题，请协调华为定位。</li>
-</ul>
-<ol start="4">
-<li>对于可稳定复现的一般类问题定位</li>
-</ol>
-<ul>
-<li><p>卷操作的主要日志记录在volume.log，tailf /var/log/cinder/volume.log 查看报错信息</p>
-</li>
-<li><p>同步tailf /var/log/nova/nova-compute.log，从逻辑上volume.log无ERROR的话，问题肯定出现在上一层的nova侧</p>
-</li>
-</ul>
-<h4 id="3-Nova-boot发放问题"><a href="#3-Nova-boot发放问题" class="headerlink" title="3.   Nova boot发放问题"></a>3.   Nova boot发放问题</h4><ol>
-<li>Inspect失败问题</li>
-</ol>
-<p>​    Inspect过程强依赖和厂商的SDN对接，一定确保对接的准确性。</p>
-<p>​    单个物理机inspect失败，表现为无法获取IP。</p>
-<ul>
-<li>确认ironic节点的dhcpd是否active（inspect获取IP过程使用的是ironic节点的dhcp服务）</li>
-</ul>
-<p>​    <code># systemctl statsu dhcpd</code></p>
-<ul>
-<li>BM侧</li>
-</ul>
-<p>查看ramdisk启动过程，确认每个网口都能被轮训到，并记录下网卡的MAC地址。</p>
-<ul>
-<li>1.3 Ironic控制节点抓包（server端）</li>
-</ul>
-<p>​    <code># tcpdump -i bond0 -s 0 -envv port 67 or port 68</code></p>
-<p>​    开启抓包命令后，立即执行inspect操作，抓取server端的discover和offer报文信息。</p>
-<ul>
-<li>抓包结果分析</li>
-</ul>
-<p>​         i.报文中没有tag标记</p>
-<p>​        很可能BM上联的交换机端口没有加入inspect网络，需要客户或是厂商确认。</p>
-<p>​         ii.只有discover没有offer报文</p>
-<p>​        则说明问题出现在dhcp服务自身。</p>
-<p>​        查看下/etc/dhcp/dhcpd.conf配置的range范围；</p>
-<p>​        查看/var/lib/dhcpd/dhcpd.leases确认下leases条目数。</p>
-<p>​        iii.server端回复offer</p>
-<p>​        则说明包丢在了中间交换机上，需要厂商确认。</p>
-<p>​        注意： discover是广播报文会一直发，而offer回包只有一次（包括request和ACK），一定要注意。</p>
-<ol start="2">
-<li>批量inspect时失败</li>
-</ol>
-<ul>
-<li>如果单个inspect时没有问题，但是批量inspect时部分失败，检查下配置的dhcp server数量。对于工行部署三个ironic都开启dhcp服务的情况，建议批量inspect的物理机不要超过30个。</li>
-</ul>
-<ol start="3">
-<li>provision 阶段失败</li>
-</ol>
-<ul>
-<li><p>确认nova节点上neutron-dhcp-agent服务是否active，ironic节点上的dhcpd是否关闭；</p>
-</li>
-<li><p>在nova节点ip netns list查看dhcp（provision网）的名字空间，在此名字空间上ping ironic节点是否通（主要是测试与外部的连通性），命令：ip netns exec <em>qdhcpxxx</em> ping ironic ip</p>
-</li>
-<li><p>进入BM节点的BMC（IPMI地址），查看boot_if及MAC，命令：cat /proc/cmdline查看BOOT_IF的MAC，再根据此MAC查看对应的接口</p>
-</li>
-<li><p>Nova侧确认是否neutron端口已经创建OK</p>
-</li>
-</ul>
-<p>​    <code>neutron port-list | grep MAC # 此MAC是上步骤中的BM主网卡MAC</code></p>
-<ul>
-<li>Nova侧（server端）抓67/68端口报文，tcpdump -s 0 -envv port 67 or port 68，3996（具体以工行规划为准）的tag为provision网VLAN，确认报文的源MAC是否是上个步骤中的MAC，若抓不到discover包侧说明可能包丢在中间的交换机上，需要厂商协助排查。</li>
-</ul>
-<p>​    注意：抓包时先开启抓包命令，再执行provision发放的操作。</p>
-<ul>
-<li>在provision网dhcp命名空间里抓包，确认discover报文到了neutron-dhcp-agent</li>
-</ul>
-<p>​    <code>ip netns exec *qdhcpxxx* tcpdump -s 0 -envv port 67 or port 68</code></p>
-<ul>
-<li>查看br-ex是否收到dhcp请求报文，并将vlan转为3996</li>
-</ul>
-<p>​    命令：<code>ovs-ofctl show br-ex</code></p>
-<ul>
-<li><p>查看br-int上是否有dl_vlan为3996的报文计数，命令ovs-ofctl show br-int</p>
-</li>
-<li><p>server收到discover但是没有offer，参考inspect问题的d）处理。</p>
-</li>
-</ul>
-<p>​    注意： discover是广播报文会一直发，而offer回包只有一次（包括request和ACK），一定要注意。</p>
-<ul>
-<li><p>在BM上手动发起dhcp请求， 命令：dhclient enps0f0，此接口是步骤c中的boot_if口</p>
-</li>
-<li><p>BM节点的boot_if口抓包（client端），tcpdump –i enps0f0 -s 0 -envv port 67 or port 68，查看是否能收到neutron-dhcp-agent发过来的offer报文，如果只有discover但是没有回包，需要交换机厂商协助排查</p>
-</li>
-</ul>
-<ol start="4">
-<li>nova boot发放失败，nova日志显示 没有host资源、标签不匹配等信息</li>
-</ol>
-<ul>
-<li><p>此类问题主要是控制层面没有合理的调度，主要集中在nova侧的排查</p>
-</li>
-<li><p>首先确认flavor中的标签信息是否跟node里的标签信息一致。Node里的标签信息在properties/capabilities信息中。</p>
-</li>
-<li><p>nova hypervisor-list 先确认hypervisor的信息，nova hypervisor-show 确认下是不是真的资源不够</p>
-</li>
-<li><p>nova hypervisor-servers <hypervisor-id> 查看哪个instance占用了这个hypervisor</p>
-</li>
-<li><p>查看nova-scheduler日志，grep <req-id> /var/log/nova/nova-scheduler.log | grep <node-uuid>，确认此node的关键信息</p>
-</li>
-<li><p>如果以上不能明确定位，可以继续查看nova-compute和neutron server日志，确认是否存在网络的问题，如有AC侧的网络报错，需要协同SDN厂商排查。</p>
-</li>
-</ul>
+<p>第三点其实也就是容器镜像，也叫作rootfs。它是一个操作系统的所有文件和目录，并不包含内核，内核是共享宿主机内核。而在rootfs上，docker又创新使用了多个增量rootfs联合挂载成一个完整rootfs的方案，也就是容器镜像中的“层”概念。这种方式也就是容器技术“强一致性”的重要体现。</p>
 
                 
             </div>
@@ -510,7 +352,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://bearlovemm.com/2022/02/22/openstack-%E8%A3%B8%E9%87%91%E5%B1%9E%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%80%9D%E8%B7%AF/">http://bearlovemm.com/2022/02/22/openstack-%E8%A3%B8%E9%87%91%E5%B1%9E%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%80%9D%E8%B7%AF/</a>
+                    <a href="http://bearlovemm.com/2022/02/28/docker/">http://bearlovemm.com/2022/02/28/docker/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -548,8 +390,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/openstack/">
-                                    <span class="chip bg-color">openstack</span>
+                                <a href="/tags/docker/">
+                                    <span class="chip bg-color">docker</span>
                                 </a>
                             
                         </div>
@@ -723,9 +565,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2022/02/28/docker/">
                     <div class="card-image">
@@ -743,9 +586,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-02-28
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-02-28
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -758,6 +601,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -776,13 +620,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/02/20/%E6%B5%85%E6%9E%90%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E9%AB%98%E5%8F%AF%E7%94%A8%E6%9C%BA%E5%88%B6/">
+                <a href="/2022/02/22/openstack-%E8%A3%B8%E9%87%91%E5%B1%9E%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%80%9D%E8%B7%AF/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="浅析分布式存储高可用机制">
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="裸金属问题排查">
                         
-                        <span class="card-title">浅析分布式存储高可用机制</span>
+                        <span class="card-title">裸金属问题排查</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -793,7 +637,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-02-20
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-02-22
                             </span>
                         <span class="publish-author">
                             
@@ -810,8 +654,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8/">
-                        <span class="chip bg-color">分布式存储</span>
+                    <a href="/tags/openstack/">
+                        <span class="chip bg-color">openstack</span>
                     </a>
                     
                 </div>
